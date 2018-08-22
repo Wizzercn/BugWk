@@ -14,6 +14,7 @@ import org.nutz.lang.Times;
 import org.nutz.lang.random.R;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.ChainBy;
 import org.nutz.mvc.annotation.Encoding;
 import org.nutz.mvc.annotation.Modules;
 
@@ -25,6 +26,7 @@ import javax.servlet.ServletContext;
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "cn.wizzer")
 @Encoding(input = "UTF-8", output = "UTF-8")
+@ChainBy(args = "chain/bugwk-mvc-chain.json")
 public class MainLauncher {
     private static final Log log = Logs.get();
     @Inject("refer:$ioc")

@@ -57,4 +57,16 @@ public class LoginController {
             return Result.error();
         }
     }
+
+    @At("/qps")
+    @Ok("raw")
+    public Object qps() {
+        return "too many requests per second";
+    }
+
+    @At("/test")
+    @Ok("raw")
+    public Object test() {
+        return "test";
+    }
 }

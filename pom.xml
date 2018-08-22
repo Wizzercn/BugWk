@@ -47,6 +47,14 @@
             <artifactId>nutzboot-starter-jetty</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-wkcache</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.belerweb</groupId>
             <artifactId>pinyin4j</artifactId>
             <version>${pinyin4j.veision}</version>
