@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-menu :default-active="$route.name" :router="true" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu ref="menu" :default-active="$route.name" :router="true" class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-menu-item index="lol" :route="{name:'lol'}">问题中心</el-menu-item>
             <el-submenu index="2" v-show="adminVisible">
                 <template slot="title">系统管理</template>
@@ -10,7 +10,7 @@
                 <el-menu-item index="tag">标签管理</el-menu-item>
                 <el-menu-item index="project">项目管理</el-menu-item>
             </el-submenu>
-            <el-submenu index="3" v-show="adminVisible">
+            <el-submenu index="3" v-show="userVisible">
                 <template slot="title">用户中心</template>
                 <el-menu-item index="#">
                     <a @click="editUser">修改资料</a>
@@ -111,6 +111,7 @@
                                 this.$cookie.set("role",d.data.role);
                                 this.$cookie.set("loginname",d.data.loginname);
                                 this.$cookie.set("nickname",d.data.nickname);
+                                this.$router.push("/user")
                             } else {
                                 this.$message({
                                     message: d.msg,

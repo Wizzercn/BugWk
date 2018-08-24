@@ -23,7 +23,7 @@ public class MyRoleFilter implements ActionFilter {
         if (Role.ADMIN.value().equalsIgnoreCase(role)) {
             return null;
         } else {
-            return new UTF8JsonView().setData(Result.error("没有权限"));
+            return new UTF8JsonView().setData(Result.error("没有权限或登录超时,请重新登录"));
         }
     }
 }
