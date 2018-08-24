@@ -24,11 +24,10 @@ public class MyCrossOriginFilter implements ActionFilter {
     protected PropertiesProxy conf;
 
     public MyCrossOriginFilter() {
-        this("*", "GET, POST, PUT, DELETE, OPTIONS, PATCH", "Origin, Content-Type, Accept, X-Requested-With", "true");
+        this("GET, POST, PUT, DELETE, OPTIONS, PATCH", "Origin, Content-Type, Accept, X-Requested-With", "true");
     }
 
-    public MyCrossOriginFilter(String origin, String methods, String headers, String credentials) {
-        this.origin = origin;
+    public MyCrossOriginFilter(String methods, String headers, String credentials) {
         this.methods = methods;
         this.headers = headers;
         this.credentials = credentials;
@@ -43,9 +42,8 @@ public class MyCrossOriginFilter implements ActionFilter {
             return null;
         }
         HttpServletResponse resp = ac.getResponse();
-        if (!Strings.isBlank(this.origin)) {
-            resp.setHeader("Access-Control-Allow-Origin", this.origin);
-        }
+        resp.setHeader("Access-Control-Allow-Origin", ac.getRequest().getHeader("Origin"));
+
 
         if (!Strings.isBlank(this.methods)) {
             resp.setHeader("Access-Control-Allow-Methods", this.methods);

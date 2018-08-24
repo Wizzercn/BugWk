@@ -19,6 +19,7 @@ public class MyRoleFilter implements ActionFilter {
 
     public View match(ActionContext ac) {
         String role = Strings.sNull(ac.getRequest().getSession().getAttribute("role"));
+        log.debug("MyRoleFilter session id::"+ac.getRequest().getSession().getId());
         if (Role.ADMIN.value().equalsIgnoreCase(role)) {
             return null;
         } else {

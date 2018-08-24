@@ -28,7 +28,7 @@ public class LoginController {
     @Inject
     private Dao dao;
 
-    @At("/do_login")
+    @At("/doLogin")
     @Ok("json")
     @AdaptBy(type = JsonAdaptor.class)
     public Object do_login(@Param("loginname") String loginname, @Param("loginpass") String loginpass, HttpSession session) {
@@ -43,6 +43,7 @@ public class LoginController {
             if (!user.getLoginpass().equals(Lang.md5(loginname + user.getSalt()))) {
                 return Result.error("用户密码不正确");
             }
+            log.debug("login session id::"+session.getId());
             session.setAttribute("loginname", user.getLoginname());
             session.setAttribute("nickname", user.getNickname());
             session.setAttribute("realname", user.getRealname());

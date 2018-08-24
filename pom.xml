@@ -11,6 +11,8 @@
         <nutzboot.version>2.3-SNAPSHOT</nutzboot.version>
         <pinyin4j.veision>2.5.1</pinyin4j.veision>
         <druid.version>1.1.10</druid.version>
+        <jjwt.version>0.9.0</jjwt.version>
+        <jackson-databind.version>2.9.5</jackson-databind.version>
         <mysql-connector-java.version>5.1.46</mysql-connector-java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -53,6 +55,17 @@
         <dependency>
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-wkcache</artifactId>
+        </dependency>
+        <!-- api token web server -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
         </dependency>
         <dependency>
             <groupId>com.belerweb</groupId>

@@ -1,16 +1,25 @@
 <template>
     <div>
-        <el-menu :default-active="activeIndex" router="true" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-            <el-menu-item index="lol">问题中心</el-menu-item>
-            <el-submenu index="2" v-show="roleVisible">
+        <el-menu :default-active="$route.name" :router="true" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+            <el-menu-item index="lol" :route="{name:'lol'}">问题中心</el-menu-item>
+            <el-submenu index="2" v-show="adminVisible">
                 <template slot="title">系统管理</template>
-                <el-menu-item index="user">
+                <el-menu-item index="user" :route="{name:'user'}">
                     用户管理
                 </el-menu-item>
-                <el-menu-item index="2-2">标签管理</el-menu-item>
-                <el-menu-item index="2-3">项目管理</el-menu-item>
+                <el-menu-item index="tag">标签管理</el-menu-item>
+                <el-menu-item index="project">项目管理</el-menu-item>
             </el-submenu>
-            <el-menu-item index="#" v-show="!roleVisible">
+            <el-submenu index="3" v-show="adminVisible">
+                <template slot="title">用户中心</template>
+                <el-menu-item index="#">
+                    <a @click="editUser">修改资料</a>
+                </el-menu-item>
+                <el-menu-item index="#">
+                    <a @click="logout">退出登录</a>
+                </el-menu-item>
+            </el-submenu>
+            <el-menu-item index="#" v-show="!userVisible">
                 <el-button @click="openLogin">登录</el-button>
             </el-menu-item>
         </el-menu>
@@ -19,18 +28,18 @@
             <el-form :model="loginForm" :rules="rules" ref="loginForm">
                 <el-form-item label="用户名" prop="loginname" :label-width="formLabelWidth">
                     <el-col :span="20">
-                        <el-input v-model="form.loginname" auto-complete="off"></el-input>
+                        <el-input v-model="loginForm.loginname" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="输入密码" prop="loginpass" :label-width="formLabelWidth">
                     <el-col :span="20">
-                        <el-input type="password" v-model="form.loginpass" auto-complete="off"></el-input>
+                        <el-input type="password" v-model="loginForm.loginpass" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="resetForm('loginForm')">取 消</el-button>
-                <el-button type="primary" @click="save">确 定</el-button>
+                <el-button type="primary" @click="doLogin">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -41,9 +50,10 @@
         name: "Header",
         data() {
             return {
-                roleVisible: false,
+                adminVisible: false,
+                userVisible: false,
                 dialogFormVisible: false,     //模态框是否显示
-                form: {
+                loginForm: {
                     loginname: '',
                     loginpass: ''
                 },
@@ -56,14 +66,27 @@
                     ]
                 },
                 formLabelWidth: '120px',
-                activeIndex: '1',
             };
         },
         methods: {
             loadRole(role) {
                 if (role == "ADMIN") {
-                    this.roleVisible = true;
+                    this.adminVisible = true;
+                    this.userVisible = true;
+                }else if (role == "USER") {
+                    this.userVisible = true;
+                }else {
+                    this.adminVisible = false;
+                    this.userVisible = false;
                 }
+            },
+            editUser(){
+
+            },
+            logout(){
+                this.$cookie.delete("role");
+                this.loadRole("NONE");
+                //this.activeIndex=this.$cookie.get("menu")||"1";
             },
             openLogin() {
                 this.dialogFormVisible = true
@@ -72,9 +95,41 @@
                 this.dialogFormVisible = false;
                 this.$refs[formName].resetFields();
             },
+            doLogin() {
+                this.$refs["loginForm"].validate((valid) => {
+                    if (valid) {
+                        this.$http.post(platform_base + '/platform/login/doLogin', this.loginForm).then((resp) => {
+                            return resp.data
+                        }).then((d) => {
+                            if (d.code == 0) {
+                                this.$message({
+                                    message: d.msg,
+                                    type: 'success'
+                                });
+                                this.resetForm("loginForm");
+                                this.loadRole(d.data.role);
+                                this.$cookie.set("role",d.data.role);
+                                this.$cookie.set("loginname",d.data.loginname);
+                                this.$cookie.set("nickname",d.data.nickname);
+                            } else {
+                                this.$message({
+                                    message: d.msg,
+                                    type: 'error'
+                                });
+                            }
+                        });
+                    } else {
+                        return false;
+                    }
+                });
+            },
             handleSelect(key, keyPath) {
-                console.log(key, keyPath);
+                //console.log(key, keyPath);
             }
+        },
+        created() {
+            var role=this.$cookie.get("role");
+            this.loadRole(role);
         }
     }
 </script>

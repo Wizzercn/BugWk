@@ -155,8 +155,10 @@
             save() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
-                        this.$http.post(platform_base + '/platform/user/add', this.form).then((resp) => {
-                            return resp.json()
+                        this.$http.post(platform_base + '/platform/user/add', this.form,{
+                            withCredentials: true
+                        }).then((resp) => {
+                            return resp.data
                         }).then((d) => {
                             if (d.code == 0) {
                                 this.$message({
@@ -188,8 +190,10 @@
                 this.$http.post(platform_base + '/platform/user/data', {
                     "page": page,
                     "size": size
+                },{
+                    withCredentials: true
                 }).then((resp) => {
-                    return resp.json()
+                    return resp.data
                 }).then((d) => {
                     if (d.code == 0) {
                         this.tableData = d.data.list;
