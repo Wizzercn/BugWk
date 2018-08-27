@@ -24,7 +24,11 @@
                     prop="disabled"
                     label="用户状态">
                 <template scope="scope">
-                    {{ scope.row.disabled }}
+                    <el-switch
+                            v-model="scope.row.disabled"
+                            active-color="#ff4949"
+                            inactive-color="#13ce66">
+                    </el-switch>
                 </template>
             </el-table-column>
             <el-table-column
@@ -82,6 +86,15 @@
                         <el-input type="password" v-model="form.checkpass" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
+                <el-form-item label="状态" prop="disabled" :label-width="formLabelWidth">
+                    <el-col :span="20">
+                        <el-switch
+                                v-model="form.disabled"
+                                active-color="#ff4949"
+                                inactive-color="#13ce66">
+                        </el-switch>
+                    </el-col>
+                </el-form-item>
                 <el-form-item label="角色" prop="role" :label-width="formLabelWidth">
                     <el-select v-model="form.role" placeholder="请选择用户角色">
                         <el-option label="管理员" value="ADMIN"></el-option>
@@ -92,6 +105,44 @@
             <div slot="footer" class="dialog-footer">
                 <el-button @click="resetForm('form')">取 消</el-button>
                 <el-button type="primary" @click="save">确 定</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog title="编辑用户" :visible.sync="dialogEditFormVisible" @close="resetEditForm('editForm')">
+            <el-form :model="form" :rules="editRules" ref="editForm">
+                <el-form-item label="用户名" prop="loginname" :label-width="formLabelWidth">
+                    <el-col :span="20">
+                        <el-input v-model="form.loginname" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="昵称" prop="nickname" :label-width="formLabelWidth">
+                    <el-col :span="20">
+                        <el-input v-model="form.nickname" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="姓名" prop="realname" :label-width="formLabelWidth">
+                    <el-col :span="20">
+                        <el-input v-model="form.realname" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="状态" prop="disabled" :label-width="formLabelWidth">
+                    <el-col :span="20">
+                        <el-switch
+                                v-model="form.disabled"
+                                active-color="#ff4949"
+                                inactive-color="#13ce66">
+                        </el-switch>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="角色" prop="role" :label-width="formLabelWidth">
+                    <el-select v-model="form.role" placeholder="请选择用户角色">
+                        <el-option label="管理员" value="ADMIN"></el-option>
+                        <el-option label="普通用户" value="USER"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="resetEditForm('editForm')">取 消</el-button>
+                <el-button type="primary" @click="edit">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -110,12 +161,15 @@
             };
             return {
                 dialogFormVisible: false,     //模态框是否显示
+                dialogEditFormVisible: false,     //模态框是否显示
                 form: {
+                    id: '',
                     loginname: '',
                     loginpass: '',
                     checkpass: '',
                     nickname: '',
                     realname: '',
+                    disabled: true,
                     role: ''
                 },
                 rules: {
@@ -140,6 +194,20 @@
                         {required: true, message: '请选择用户角色', trigger: 'blur'}
                     ]
                 },
+                editRules: {
+                    loginname: [
+                        {required: true, message: '请输入用户名', trigger: 'blur'}
+                    ],
+                    nickname: [
+                        {required: true, message: '请输入昵称', trigger: 'blur'}
+                    ],
+                    realname: [
+                        {required: true, message: '请输入姓名', trigger: 'blur'}
+                    ],
+                    role: [
+                        {required: true, message: '请选择用户角色', trigger: 'blur'}
+                    ]
+                },
                 formLabelWidth: '120px',
                 tableData: [],
                 pagesize: 10,
@@ -155,7 +223,7 @@
             save() {
                 this.$refs["form"].validate((valid) => {
                     if (valid) {
-                        this.$http.post(platform_base + '/platform/user/add', this.form,{
+                        this.$http.post(platform_base + '/platform/user/add', this.form, {
                             withCredentials: true
                         }).then((resp) => {
                             return resp.data
@@ -166,6 +234,34 @@
                                     type: 'success'
                                 });
                                 this.resetForm("form");
+                                this.pageData(1, this.pagesize);
+                            } else {
+                                this.$message({
+                                    message: d.msg,
+                                    type: 'error'
+                                });
+                            }
+                        });
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            edit() {
+                this.$refs["editForm"].validate((valid) => {
+                    if (valid) {
+                        this.$http.post(platform_base + '/platform/user/edit', this.form, {
+                            withCredentials: true
+                        }).then((resp) => {
+                            return resp.data
+                        }).then((d) => {
+                            if (d.code == 0) {
+                                this.$message({
+                                    message: d.msg,
+                                    type: 'success'
+                                });
+                                this.resetEditForm("editForm");
+                                this.pageData(1, this.pagesize);
                             } else {
                                 this.$message({
                                     message: d.msg,
@@ -182,7 +278,59 @@
                 this.dialogFormVisible = false;
                 this.$refs[formName].resetFields();
             },
-            handleCurrentChange: function(val) {
+            resetEditForm(formName) {
+                this.dialogEditFormVisible = false;
+                this.$refs[formName].resetFields();
+            },
+            handleEdit: function (index, row) {
+                this.$http.post(platform_base + '/platform/user/get', {
+                    "id": row.id
+                }, {
+                    withCredentials: true
+                }).then((resp) => {
+                    return resp.data
+                }).then((d) => {
+                    if (d.code == 0) {
+                        this.form = d.data;
+                        this.dialogEditFormVisible = true;
+                    } else {
+                        this.$message({
+                            message: d.msg,
+                            type: 'error'
+                        });
+                    }
+                });
+            },
+            handleDelete: function (index, row) {
+                this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$http.post(platform_base + '/platform/user/del', {
+                        "id": row.id
+                    }, {
+                        withCredentials: true
+                    }).then((resp) => {
+                        return resp.data
+                    }).then((d) => {
+                        if (d.code == 0) {
+                            this.$message({
+                                message: d.msg,
+                                type: 'success'
+                            });
+                            this.pageData(1, this.pagesize);
+                        } else {
+                            this.$message({
+                                message: d.msg,
+                                type: 'error'
+                            });
+                        }
+                    });
+                }).catch(() => {
+                })
+            },
+            handleCurrentChange: function (val) {
                 this.currentPage = val;
                 this.pageData(this.currentPage, this.pagesize);
             },
@@ -190,7 +338,7 @@
                 this.$http.post(platform_base + '/platform/user/data', {
                     "page": page,
                     "size": size
-                },{
+                }, {
                     withCredentials: true
                 }).then((resp) => {
                     return resp.data
@@ -208,7 +356,7 @@
             }
         },
         mounted: function () {
-            this.pageData(this.currentPage,this.pagesize);
+            this.pageData(this.currentPage, this.pagesize);
         }
     }
 </script>

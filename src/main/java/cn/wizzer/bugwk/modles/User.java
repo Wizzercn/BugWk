@@ -9,6 +9,7 @@ import java.io.Serializable;
  * Created by wizzer on 2018.08
  */
 @Table("user")
+@TableIndexes({@Index(name = "INDEX_USER_LOGINNAMAE", fields = {"loginname"}, unique = true)})
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 

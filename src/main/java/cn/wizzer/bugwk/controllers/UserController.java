@@ -25,7 +25,7 @@ import java.util.List;
  */
 @IocBean
 @At("/platform/user")
-@Filters({@By(type = MyCrossOriginFilter.class),@By(type = MyRoleFilter.class)})
+@Filters({@By(type = MyCrossOriginFilter.class), @By(type = MyRoleFilter.class)})
 public class UserController {
     private static final Log log = Logs.get();
     @Inject
@@ -44,6 +44,41 @@ public class UserController {
             user.setLoginpass(Lang.md5(user.getLoginname() + salt));
             user.setCreateAt(Times.getTS());
             dao.insert(user);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    @At("/get")
+    @Ok("json")
+    @AdaptBy(type = JsonAdaptor.class)
+    public Object get(@Param("id") String id) {
+        try {
+            return Result.success(dao.fetch(User.class, Cnd.where("id", "=", id)));
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    @At("/edit")
+    @Ok("json")
+    @AdaptBy(type = JsonAdaptor.class)
+    public Object edit(@Param("::") User user) {
+        try {
+            dao.updateIgnoreNull(user);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    @At("/del")
+    @Ok("json")
+    @AdaptBy(type = JsonAdaptor.class)
+    public Object del(@Param("id") String id) {
+        try {
+            dao.delete(User.class, id);
             return Result.success();
         } catch (Exception e) {
             return Result.error();
