@@ -14,7 +14,7 @@ import org.nutz.mvc.view.UTF8JsonView;
  * 权限拦截，如果是大型项目可以使用动作链结合shiro来做，这里是图省事，不要照搬！
  * Created by wizzer on 2018.08
  */
-public class MyRoleFilter implements ActionFilter {
+public class MyAdminRoleFilter implements ActionFilter {
     private static final Log log = Logs.get();
 
     public View match(ActionContext ac) {

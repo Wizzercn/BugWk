@@ -1,9 +1,11 @@
 package cn.wizzer.bugwk.controllers;
 
 import cn.wizzer.bugwk.commons.base.Result;
+import cn.wizzer.bugwk.commons.filter.MyAdminRoleFilter;
 import cn.wizzer.bugwk.commons.filter.MyCrossOriginFilter;
-import cn.wizzer.bugwk.commons.filter.MyRoleFilter;
+import cn.wizzer.bugwk.commons.filter.MyUserRoleFilter;
 import cn.wizzer.bugwk.modles.User;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.QueryResult;
@@ -25,7 +27,7 @@ import java.util.List;
  */
 @IocBean
 @At("/platform/user")
-@Filters({@By(type = MyCrossOriginFilter.class), @By(type = MyRoleFilter.class)})
+@Filters({@By(type = MyCrossOriginFilter.class), @By(type = MyUserRoleFilter.class)})
 public class UserController {
     private static final Log log = Logs.get();
     @Inject
@@ -34,6 +36,7 @@ public class UserController {
     @At("/add")
     @Ok("json")
     @AdaptBy(type = JsonAdaptor.class)
+    @Filters({@By(type = MyCrossOriginFilter.class), @By(type = MyAdminRoleFilter.class)})
     public Object add(@Param("::") User user) {
         try {
             if (dao.count(User.class, Cnd.where("loginname", "=", user.getLoginname())) > 0) {
@@ -73,9 +76,22 @@ public class UserController {
         }
     }
 
+    @At("/update")
+    @Ok("json")
+    @AdaptBy(type = JsonAdaptor.class)
+    public Object update(@Param("::") User user) {
+        try {
+            dao.update(User.class, Chain.make("nickname", user.getNickname()).add("realname", user.getRealname()), Cnd.where("loginname", "=", user.getLoginname()));
+            return Result.success(user);
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
     @At("/del")
     @Ok("json")
     @AdaptBy(type = JsonAdaptor.class)
+    @Filters({@By(type = MyCrossOriginFilter.class), @By(type = MyAdminRoleFilter.class)})
     public Object del(@Param("id") String id) {
         try {
             dao.delete(User.class, id);

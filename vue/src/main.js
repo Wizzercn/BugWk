@@ -29,7 +29,8 @@ router.beforeEach((to, from, next) => {
 axios.defaults.withCredentials = true
 axios.interceptors.response.use(function (response) {
     if(555 == response.data.code){//后台session失效
-        VueCookie.set("role","");//设置cookie
+        VueCookie.delete("role");//设置cookie
+        VueCookie.delete("loginname");//设置cookie
         router.replace({path: '/lol'})//跳转到首页
         window.location.reload()//刷新页面重新初始化菜单
     }

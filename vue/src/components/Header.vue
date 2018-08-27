@@ -12,11 +12,11 @@
             </el-submenu>
             <el-submenu index="3" v-show="userVisible">
                 <template slot="title">用户中心</template>
-                <el-menu-item index="#">
-                    <a @click="editUser">修改资料</a>
+                <el-menu-item index="#" @click="editUser">
+                    修改资料
                 </el-menu-item>
-                <el-menu-item index="#">
-                    <a @click="logout">退出登录</a>
+                <el-menu-item index="#" @click="logout">
+                    退出登录
                 </el-menu-item>
             </el-submenu>
             <el-menu-item index="#" v-show="!userVisible">
@@ -42,6 +42,24 @@
                 <el-button type="primary" @click="doLogin">确 定</el-button>
             </div>
         </el-dialog>
+        <el-dialog title="修改资料" :visible.sync="dialogInfoFormVisible" @close="resetInfoForm()">
+            <el-form :model="infoForm" :rules="infoRules" ref="infoForm">
+                <el-form-item label="昵称" prop="nickname" :label-width="formLabelWidth">
+                    <el-col :span="20">
+                        <el-input v-model="infoForm.nickname" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="姓名" prop="realname" :label-width="formLabelWidth">
+                    <el-col :span="20">
+                        <el-input v-model="infoForm.realname" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="resetInfoForm()">取 消</el-button>
+                <el-button type="primary" @click="save">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -53,9 +71,15 @@
                 adminVisible: false,
                 userVisible: false,
                 dialogFormVisible: false,     //模态框是否显示
+                dialogInfoFormVisible:false,
                 loginForm: {
                     loginname: '',
                     loginpass: ''
+                },
+                infoForm: {
+                    loginname: '',
+                    nickname: '',
+                    realname: ''
                 },
                 rules: {
                     loginname: [
@@ -63,6 +87,14 @@
                     ],
                     loginpass: [
                         {required: true, message: '请输入密码', trigger: 'blur'}
+                    ]
+                },
+                infoRules: {
+                    nickname: [
+                        {required: true, message: '请输入昵称', trigger: 'blur'}
+                    ],
+                    realname: [
+                        {required: true, message: '请输入姓名', trigger: 'blur'}
                     ]
                 },
                 formLabelWidth: '120px',
@@ -81,7 +113,10 @@
                 }
             },
             editUser(){
-
+                this.dialogInfoFormVisible=true
+                this.infoForm.loginname=this.$cookie.get("loginname")
+                this.infoForm.nickname=this.$cookie.get("nickname")
+                this.infoForm.realname=this.$cookie.get("realname")
             },
             logout(){
                 this.$cookie.delete("role");
@@ -94,6 +129,37 @@
             resetForm(formName) {
                 this.dialogFormVisible = false;
                 this.$refs[formName].resetFields();
+            },
+            resetInfoForm() {
+                this.dialogInfoFormVisible = false;
+                this.$refs["infoForm"].resetFields();
+            },
+            save(){
+                this.$refs["infoForm"].validate((valid) => {
+                    if (valid) {
+                        this.$http.post(platform_base + '/platform/user/update', this.infoForm).then((resp) => {
+                            return resp.data
+                        }).then((d) => {
+                            if (d.code == 0) {
+                                this.$message({
+                                    message: d.msg,
+                                    type: 'success'
+                                });
+                                this.$cookie.set("loginname",d.data.loginname);
+                                this.$cookie.set("nickname",d.data.nickname);
+                                this.$cookie.set("realname",d.data.realname);
+                                this.resetInfoForm()
+                            } else {
+                                this.$message({
+                                    message: d.msg,
+                                    type: 'error'
+                                });
+                            }
+                        });
+                    } else {
+                        return false;
+                    }
+                });
             },
             doLogin() {
                 this.$refs["loginForm"].validate((valid) => {
@@ -111,6 +177,7 @@
                                 this.$cookie.set("role",d.data.role);
                                 this.$cookie.set("loginname",d.data.loginname);
                                 this.$cookie.set("nickname",d.data.nickname);
+                                this.$cookie.set("realname",d.data.realname);
                                 this.$router.push("/user")
                             } else {
                                 this.$message({
