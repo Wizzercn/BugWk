@@ -7,7 +7,7 @@
 * 为 NutzWk 6.0（微服务+API网关+前后端分离）做前期的预研及技术栈评估
 #### 技术体系
 * 前端：Vue + Element
-* 后端：NutzBoot + Elasticsearch + Redis + MySQL
+* 后端：NutzBoot + Lucene + Redis + MySQL
 #### 开发计划
 ##### 一期
 * Bug及解决方法的录入功能（参考答案及外部链接，是否重复发生）

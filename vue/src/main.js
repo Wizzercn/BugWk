@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import axios from 'axios';
 import VueAxios from 'vue-axios'
 import VueCookie from 'vue-cookie'
+import VueMoment from 'vue-moment'
 import Routers from './router'
 
 // Tell Vue to use the plugin
@@ -12,6 +13,7 @@ Vue.use(VueCookie)
 Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
 Vue.use(VueCookie)
+Vue.use(VueMoment)
 Vue.config.productionTip = false
 
 

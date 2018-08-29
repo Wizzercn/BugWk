@@ -7,20 +7,33 @@
                 :data="tableData"
                 style="width: 100%">
             <el-table-column
-                    prop="date"
-                    label="日期"
+                    prop="nickname"
+                    label="Buger"
                     width="180">
             </el-table-column>
             <el-table-column
-                    prop="name"
-                    label="姓名"
-                    width="180">
+                    prop="title"
+                    label="标题">
+                <template scope="scope">
+                    <router-link :to="{ name: '/lol/bug', params: { userId: scope.row.id }}" class="bug_title">{{scope.row.title}}</router-link>
+
+                </template>
             </el-table-column>
             <el-table-column
-                    prop="address"
-                    label="地址">
+                    prop="updateAtStr"
+                    label="录入时间"
+                    width="180">
             </el-table-column>
         </el-table>
+        <div align="center">
+            <el-pagination
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-size="pagesize"
+                    layout="total, prev, pager, next"
+                    :total="totalCount">
+            </el-pagination>
+        </div>
     </div>
 </template>
 
@@ -30,23 +43,65 @@
         data() {
             return {
                 isAdmin:false,
-                tableData: []
+                tableData: [],
+                pagesize: 10,
+                currentPage: 1,
+                start: 1,
+                totalCount: 0
             }
         },
         methods: {
             addBug:function(){
                 this.$router.push("/lol/add")
+            },
+            handleCurrentChange: function (val) {
+                this.currentPage = val;
+                this.pageData(this.currentPage, this.pagesize);
+            },
+            pageData(page, size) {
+                this.$http.post(platform_base + '/platform/bug/data', {
+                    "page": page,
+                    "size": size
+                }, {
+                    withCredentials: true
+                }).then((resp) => {
+                    return resp.data
+                }).then((d) => {
+                    if (d.code == 0) {
+                        this.tableData = d.data.list;
+                        this.totalCount = d.data.pager.recordCount;
+                    } else {
+                        this.$message({
+                            message: d.msg,
+                            type: 'error'
+                        });
+                    }
+                });
             }
         },
         mounted: function () {
-            console.log(this.$cookie.get("role"))
             if("ADMIN"==this.$cookie.get("role")){
                 this.isAdmin=true
             }
+            this.pageData(this.currentPage, this.pagesize);
         }
     }
 </script>
 
 <style scoped>
-
+    .bug_title{
+        color: #778087;
+        max-width: 70%;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        vertical-align: bottom;
+        font-size: 16px;
+        line-height: 30px;
+    }
+    a:hover{
+        cursor: pointer;
+        text-decoration: underline;
+    }
 </style>

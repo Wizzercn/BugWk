@@ -1,17 +1,14 @@
 package cn.wizzer.bugwk.modles;
 
-import cn.wizzer.bugwk.commons.utils.Toolkit;
 import org.nutz.dao.entity.annotation.*;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by wizzer on 2018.08
  */
-@Table("bug")
-public class Bug implements Serializable {
+@Table("reply")
+public class Reply implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column
@@ -20,6 +17,11 @@ public class Bug implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 32)
     @Prev(els = {@EL("uuid()")})
     private String id;
+
+    @Column
+    @Comment("Bug ID")
+    @ColDefine(type = ColType.VARCHAR, width = 32)
+    private String bugId;
 
     @Column
     @Comment("用户ID")
@@ -32,29 +34,9 @@ public class Bug implements Serializable {
     private String nickname;
 
     @Column
-    @Comment("标题")
-    @ColDefine(type = ColType.VARCHAR, width = 255)
-    private String title;
-
-    @Column
     @Comment("内容")
     @ColDefine(type = ColType.TEXT)
     private String note;
-
-    @Column
-    @Comment("Bug等级")
-    @ColDefine(type = ColType.INT, width = 1)
-    private Integer level;
-
-    @Column
-    @Comment("Bug标签")
-    @ColDefine(type = ColType.VARCHAR, width = 255)
-    private Set<String> tag;
-
-    @Column
-    @Comment("所属项目")
-    @ColDefine(type = ColType.VARCHAR, width = 255)
-    private String project;
 
     @Column
     @Comment("是否禁用")
@@ -71,22 +53,20 @@ public class Bug implements Serializable {
     @ColDefine(type = ColType.INT, width = 9)
     private Long createAt;
 
-    @Column
-    @Comment("更新时间")
-    @ColDefine(type = ColType.INT, width = 9)
-    private Long updateAt;
-
-    @Many(target = Reply.class, field = "bugId")
-    protected List<Reply> replies;
-
-    private String updateAtStr;
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getBugId() {
+        return bugId;
+    }
+
+    public void setBugId(String bugId) {
+        this.bugId = bugId;
     }
 
     public String getUserId() {
@@ -105,44 +85,12 @@ public class Bug implements Serializable {
         this.nickname = nickname;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getNote() {
         return note;
     }
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public Set<String> getTag() {
-        return tag;
-    }
-
-    public void setTag(Set<String> tag) {
-        this.tag = tag;
-    }
-
-    public String getProject() {
-        return project;
-    }
-
-    public void setProject(String project) {
-        this.project = project;
     }
 
     public boolean isDisabled() {
@@ -167,29 +115,5 @@ public class Bug implements Serializable {
 
     public void setCreateAt(Long createAt) {
         this.createAt = createAt;
-    }
-
-    public Long getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Long updateAt) {
-        this.updateAt = updateAt;
-    }
-
-    public List<Reply> getReplies() {
-        return replies;
-    }
-
-    public void setReplies(List<Reply> replies) {
-        this.replies = replies;
-    }
-
-    public String getUpdateAtStr() {
-        return Toolkit.updateAt(updateAt);
-    }
-
-    public void setUpdateAtStr(String updateAtStr) {
-        this.updateAtStr = updateAtStr;
     }
 }

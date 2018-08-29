@@ -12,6 +12,10 @@
         <pinyin4j.veision>2.5.1</pinyin4j.veision>
         <druid.version>1.1.10</druid.version>
         <jjwt.version>0.9.0</jjwt.version>
+        <lucene.version>7.4.0</lucene.version>
+        <ansj_seg.version>5.1.6</ansj_seg.version>
+        <ansj_lucene7_plug.version>5.1.5.1</ansj_lucene7_plug.version>
+        <lucene.version>7.4.0</lucene.version>
         <jackson-databind.version>2.9.5</jackson-databind.version>
         <mysql-connector-java.version>5.1.46</mysql-connector-java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,6 +84,41 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-connector-java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ansj</groupId>
+            <artifactId>ansj_seg</artifactId>
+            <version>${ansj_seg.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ansj</groupId>
+            <artifactId>ansj_lucene7_plug</artifactId>
+            <version>${ansj_lucene7_plug.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pegdown</groupId>
+            <artifactId>pegdown</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-core</artifactId>
+            <version>2.6.11</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
