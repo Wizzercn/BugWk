@@ -149,6 +149,7 @@ public class Markdowns {
             }
             return re;
         } catch (Exception e) {
+            e.printStackTrace();
             return "";
         } finally {
             if (log.isDebugEnabled()) {

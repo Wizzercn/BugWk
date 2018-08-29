@@ -5,6 +5,7 @@ import cn.wizzer.bugwk.commons.filter.MyCrossOriginFilter;
 import cn.wizzer.bugwk.commons.filter.MyUserRoleFilter;
 import cn.wizzer.bugwk.commons.service.BugService;
 import cn.wizzer.bugwk.commons.service.SearchService;
+import cn.wizzer.bugwk.commons.utils.Markdowns;
 import cn.wizzer.bugwk.commons.utils.Toolkit;
 import cn.wizzer.bugwk.modles.Bug;
 import cn.wizzer.bugwk.modles.Tag;
@@ -176,6 +177,21 @@ public class BugController {
             List<Bug> list = dao.query(Bug.class, cnd, pager);
             return Result.success(new QueryResult(list, pager));
         } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    @At("/s")
+    @Ok("json")
+    @AdaptBy(type = JsonAdaptor.class)
+    @Filters({@By(type = MyCrossOriginFilter.class)})
+    public Object s(@Param("id") String id) {
+        try {
+            Bug bug=dao.fetch(Bug.class, id);
+            bug.setNote(Markdowns.toHtml(bug.getNote(),""));
+            return Result.success(dao.fetchLinks(bug, null));
+        } catch (Exception e) {
+            e.printStackTrace();
             return Result.error();
         }
     }

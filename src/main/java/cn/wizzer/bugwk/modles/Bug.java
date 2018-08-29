@@ -77,7 +77,10 @@ public class Bug implements Serializable {
     private Long updateAt;
 
     @Many(target = Reply.class, field = "bugId")
-    protected List<Reply> replies;
+    private List<Reply> replies;
+
+    @One(field = "userId")
+    private User user;
 
     private String updateAtStr;
 
@@ -191,5 +194,13 @@ public class Bug implements Serializable {
 
     public void setUpdateAtStr(String updateAtStr) {
         this.updateAtStr = updateAtStr;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

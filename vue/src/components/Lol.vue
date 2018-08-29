@@ -15,8 +15,7 @@
                     prop="title"
                     label="标题">
                 <template scope="scope">
-                    <router-link :to="{ name: '/lol/bug', params: { userId: scope.row.id }}" class="bug_title">{{scope.row.title}}</router-link>
-
+                    <a class="bug_title" :href="'/lol/bug/'+scope.row.id" target="_blank">{{scope.row.title}}</a>
                 </template>
             </el-table-column>
             <el-table-column
