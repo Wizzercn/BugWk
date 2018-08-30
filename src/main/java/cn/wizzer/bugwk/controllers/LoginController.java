@@ -43,8 +43,9 @@ public class LoginController {
             if (!user.getLoginpass().equals(Lang.md5(loginname + user.getSalt()))) {
                 return Result.error("用户密码不正确");
             }
-            log.debug("login session id::"+session.getId());
+            log.debug("login session id::" + session.getId());
             session.setAttribute("loginname", user.getLoginname());
+            session.setAttribute("userid", user.getId());
             session.setAttribute("nickname", user.getNickname());
             session.setAttribute("realname", user.getRealname());
             session.setAttribute("role", user.getRole());

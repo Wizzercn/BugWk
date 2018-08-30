@@ -1,5 +1,7 @@
 package cn.wizzer.bugwk.modles;
 
+import cn.wizzer.bugwk.commons.utils.Markdowns;
+import cn.wizzer.bugwk.commons.utils.Toolkit;
 import org.nutz.dao.entity.annotation.*;
 
 import java.io.Serializable;
@@ -52,6 +54,9 @@ public class Reply implements Serializable {
     @Comment("创建时间")
     @ColDefine(type = ColType.INT, width = 9)
     private Long createAt;
+
+    private String noteHtml;
+    private String createAtStr;
 
     public String getId() {
         return id;
@@ -115,5 +120,21 @@ public class Reply implements Serializable {
 
     public void setCreateAt(Long createAt) {
         this.createAt = createAt;
+    }
+
+    public String getNoteHtml() {
+        return Markdowns.toHtml(this.note, "");
+    }
+
+    public void setNoteHtml(String noteHtml) {
+        this.noteHtml = noteHtml;
+    }
+
+    public String getCreateAtStr() {
+        return Toolkit.updateAt(this.createAt);
+    }
+
+    public void setCreateAtStr(String createAtStr) {
+        this.createAtStr = createAtStr;
     }
 }

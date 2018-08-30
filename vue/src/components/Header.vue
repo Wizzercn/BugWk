@@ -1,6 +1,7 @@
 <template>
     <div>
-        <el-menu ref="menu" :default-active="$route.name" :router="true" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu ref="menu" :default-active="$route.name" :router="true" class="el-menu-demo" mode="horizontal"
+                 @select="handleSelect">
             <el-menu-item index="lol" :route="{name:'lol'}">问题中心</el-menu-item>
             <el-submenu index="2" v-show="adminVisible">
                 <template slot="title">系统管理</template>
@@ -24,6 +25,11 @@
             </el-menu-item>
         </el-menu>
         <div class="line"></div>
+        <div class="search">
+            <el-input placeholder="请输入内容" v-model="keyword" @keyup.enter.native="doSearch" class="input-with-select">
+                <el-button slot="append" icon="el-icon-search" @click="doSearch"></el-button>
+            </el-input>
+        </div>
         <el-dialog title="用户登录" :visible.sync="dialogFormVisible" @close="resetForm('loginForm')">
             <el-form :model="loginForm" :rules="rules" ref="loginForm">
                 <el-form-item label="用户名" prop="loginname" :label-width="formLabelWidth">
@@ -71,7 +77,8 @@
                 adminVisible: false,
                 userVisible: false,
                 dialogFormVisible: false,     //模态框是否显示
-                dialogInfoFormVisible:false,
+                dialogInfoFormVisible: false,
+                keyword: "",
                 loginForm: {
                     loginname: '',
                     loginpass: ''
@@ -105,20 +112,20 @@
                 if (role == "ADMIN") {
                     this.adminVisible = true;
                     this.userVisible = true;
-                }else if (role == "USER") {
+                } else if (role == "USER") {
                     this.userVisible = true;
-                }else {
+                } else {
                     this.adminVisible = false;
                     this.userVisible = false;
                 }
             },
-            editUser(){
-                this.dialogInfoFormVisible=true
-                this.infoForm.loginname=this.$cookie.get("loginname")
-                this.infoForm.nickname=this.$cookie.get("nickname")
-                this.infoForm.realname=this.$cookie.get("realname")
+            editUser() {
+                this.dialogInfoFormVisible = true
+                this.infoForm.loginname = this.$cookie.get("loginname")
+                this.infoForm.nickname = this.$cookie.get("nickname")
+                this.infoForm.realname = this.$cookie.get("realname")
             },
-            logout(){
+            logout() {
                 this.$cookie.delete("role");
                 this.loadRole("NONE");
                 //this.$router.push("/lol")
@@ -135,7 +142,7 @@
                 this.dialogInfoFormVisible = false;
                 this.$refs["infoForm"].resetFields();
             },
-            save(){
+            save() {
                 this.$refs["infoForm"].validate((valid) => {
                     if (valid) {
                         this.$http.post(platform_base + '/platform/user/update', this.infoForm).then((resp) => {
@@ -146,9 +153,9 @@
                                     message: d.msg,
                                     type: 'success'
                                 });
-                                this.$cookie.set("loginname",d.data.loginname);
-                                this.$cookie.set("nickname",d.data.nickname);
-                                this.$cookie.set("realname",d.data.realname);
+                                this.$cookie.set("loginname", d.data.loginname);
+                                this.$cookie.set("nickname", d.data.nickname);
+                                this.$cookie.set("realname", d.data.realname);
                                 this.resetInfoForm()
                             } else {
                                 this.$message({
@@ -175,10 +182,10 @@
                                 });
                                 this.resetForm("loginForm");
                                 this.loadRole(d.data.role);
-                                this.$cookie.set("role",d.data.role);
-                                this.$cookie.set("loginname",d.data.loginname);
-                                this.$cookie.set("nickname",d.data.nickname);
-                                this.$cookie.set("realname",d.data.realname);
+                                this.$cookie.set("role", d.data.role);
+                                this.$cookie.set("loginname", d.data.loginname);
+                                this.$cookie.set("nickname", d.data.nickname);
+                                this.$cookie.set("realname", d.data.realname);
                                 window.location.reload()
                                 //this.$router.replace({path: '/lol'})//跳转到首页
                             } else {
@@ -196,7 +203,7 @@
             handleSelect(key, keyPath) {
                 //console.log(key, keyPath);
             },
-            resetIndex(){
+            resetIndex() {
                 this.$confirm('此操作将重建索引库, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -218,20 +225,22 @@
                         }
                     });
                 }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
                 });
+            },
+            doSearch() {
+                console.log(1)
             }
         },
         created() {
-            var role=this.$cookie.get("role");
+            var role = this.$cookie.get("role");
             this.loadRole(role);
         }
     }
 </script>
 
 <style scoped>
-
+    .search{
+        float: right;
+        margin-top: -50px;
+    }
 </style>

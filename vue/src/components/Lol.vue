@@ -9,7 +9,7 @@
             <el-table-column
                     prop="nickname"
                     label="Buger"
-                    width="180">
+                    width="110">
             </el-table-column>
             <el-table-column
                     prop="title"
@@ -99,7 +99,10 @@
         font-size: 16px;
         line-height: 30px;
     }
-    a:hover{
+    a{
+        text-decoration-line:none;
+    }
+    /deep/ a:hover{
         cursor: pointer;
         text-decoration: underline;
     }
@@ -108,6 +111,7 @@
         width: 10px;
         padding: 3px;
         margin-left: 2px;
+        margin-right: 2px;
         line-height: 2rem;
         -moz-border-radius: 50px;
         -webkit-border-radius: 50px;

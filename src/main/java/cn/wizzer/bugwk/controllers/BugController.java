@@ -8,6 +8,7 @@ import cn.wizzer.bugwk.commons.service.SearchService;
 import cn.wizzer.bugwk.commons.utils.Markdowns;
 import cn.wizzer.bugwk.commons.utils.Toolkit;
 import cn.wizzer.bugwk.modles.Bug;
+import cn.wizzer.bugwk.modles.Reply;
 import cn.wizzer.bugwk.modles.Tag;
 import cn.wizzer.bugwk.modles.User;
 import org.nutz.aop.interceptor.async.Async;
@@ -187,9 +188,32 @@ public class BugController {
     @Filters({@By(type = MyCrossOriginFilter.class)})
     public Object s(@Param("id") String id) {
         try {
-            Bug bug=dao.fetch(Bug.class, id);
-            bug.setNote(Markdowns.toHtml(bug.getNote(),""));
+            Bug bug = dao.fetch(Bug.class, id);
+            bug.setNote(Markdowns.toHtml(bug.getNote(), ""));
             return Result.success(dao.fetchLinks(bug, null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error();
+        }
+    }
+
+    @At("/reply")
+    @Ok("json")
+    @AdaptBy(type = JsonAdaptor.class)
+    public Object reply(@Param("bugId") String bugId, @Param("note") String note, HttpSession session) {
+        try {
+            String loginname = Strings.sNull(session.getAttribute("loginname"));
+            String nickname = Strings.sNull(session.getAttribute("nickname"));
+            String userid = Strings.sNull(session.getAttribute("userid"));
+            Reply reply = new Reply();
+            reply.setNote(note);
+            reply.setBugId(bugId);
+            reply.setCreateAt(Times.getTS());
+            reply.setUserId(userid);
+            reply.setCreateBy(loginname);
+            reply.setNickname(nickname);
+            dao.insert(reply);
+            return Result.success();
         } catch (Exception e) {
             e.printStackTrace();
             return Result.error();

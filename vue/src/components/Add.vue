@@ -112,7 +112,6 @@
                 this.$refs["bugForm"].resetFields();
             },
             topicSubmit: function () {
-                console.log(this.bugForm.tag)
                 this.bugForm.loginname=this.$cookie.get("loginname")
                 this.bugForm.title = this.bugForm.title.trim();
                 if (this.bugForm.title.length < 5) {
