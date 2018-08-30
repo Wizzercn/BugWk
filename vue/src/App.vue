@@ -19,7 +19,7 @@
 </script>
 <style>
 #app {
-  font-family: '新宋体','Avenir', Helvetica, Arial, sans-serif;
+ font-family: '新宋体','Avenir', Helvetica, Arial, sans-serif;
 
 }
 </style>

@@ -121,7 +121,8 @@
             logout(){
                 this.$cookie.delete("role");
                 this.loadRole("NONE");
-                this.$router.push("/lol")
+                //this.$router.push("/lol")
+                window.location.reload()
             },
             openLogin() {
                 this.dialogFormVisible = true

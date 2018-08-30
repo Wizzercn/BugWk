@@ -16,6 +16,7 @@
         <ansj_seg.version>5.1.6</ansj_seg.version>
         <ansj_lucene7_plug.version>5.1.5.1</ansj_lucene7_plug.version>
         <lucene.version>7.4.0</lucene.version>
+        <asm.version>5.0.3</asm.version>
         <jackson-databind.version>2.9.5</jackson-databind.version>
         <mysql-connector-java.version>5.1.46</mysql-connector-java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -114,6 +115,31 @@
             <groupId>org.pegdown</groupId>
             <artifactId>pegdown</artifactId>
             <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-analysis</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-commons</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-tree</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-util</artifactId>
+            <version>${asm.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>

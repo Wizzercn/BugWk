@@ -15,7 +15,7 @@
                     prop="title"
                     label="标题">
                 <template scope="scope">
-                    <a class="bug_title" :href="'/lol/bug/'+scope.row.id" target="_blank">{{scope.row.title}}</a>
+                   <span :class="'level lv-'+scope.row.level">&nbsp;</span> <a class="bug_title" :href="'/lol/bug/'+scope.row.id" target="_blank">{{scope.row.title}}</a>
                 </template>
             </el-table-column>
             <el-table-column
@@ -102,5 +102,48 @@
     a:hover{
         cursor: pointer;
         text-decoration: underline;
+    }
+    .level{
+        color: white;
+        width: 10px;
+        padding: 3px;
+        margin-left: 2px;
+        line-height: 2rem;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+    }
+    .lv-0{
+        background-color: #66FF99;
+    }
+    .lv-10{
+        background-color: #CCFF99;
+    }
+    .lv-20{
+        background-color: #FFFF99;
+    }
+    .lv-30{
+        background-color: #FFFF33;
+    }
+    .lv-40{
+        background-color: #FFCC33;
+    }
+    .lv-50{
+        background-color: #FF9400;
+    }
+    .lv-60{
+        background-color: #FF66CC;
+    }
+    .lv-70{
+        background-color: #CC3399;
+    }
+    .lv-80{
+        background-color: #FF3333;
+    }
+    .lv-90{
+        background-color: #CC0000;
+    }
+    .lv-100{
+        background-color: #660000;
     }
 </style>

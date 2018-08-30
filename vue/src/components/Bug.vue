@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-            <span class="title">{{bug.title}}</span>
+           <span :class="'level lv-'+bug.level">&nbsp;</span><span class="title">{{bug.title}}</span>
         </el-row>
         <el-row>
             <div class="changes">
@@ -19,11 +19,15 @@
             </div>
         </el-row>
         <el-row>
+            <div class="changes">
+                严重度: {{bug.level}}
+            </div>
+        </el-row>
+        <el-row>
             <div class='inner topic'>
 
                 <div class='topic_content' itemprop="articleBody">
-                    <div class="markdown-text">
-                        {{bug.note}}
+                    <div class="markdown-text" v-html="bug.note">
                     </div>
                 </div>
             </div>
@@ -37,7 +41,14 @@
         data() {
             return {
                 isUser:false,
-                bug: {}
+                bug: {
+                    id:"",
+                    title:"",
+                    user:{
+                        id:"",
+                        realname:""
+                    }
+                }
             }
         },
         mounted: function () {
@@ -83,5 +94,82 @@
         background-color: lightsteelblue;
         margin-left: 10px;
         padding: 2px;
+    }
+    .level{
+        color: white;
+        width: 10px;
+        padding: 3px;
+        margin-left: 2px;
+        line-height: 2.5rem;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+    }
+    .lv-0{
+        background-color: #66FF99;
+    }
+    .lv-10{
+        background-color: #CCFF99;
+    }
+    .lv-20{
+        background-color: #FFFF99;
+    }
+    .lv-30{
+        background-color: #FFFF33;
+    }
+    .lv-40{
+        background-color: #FFCC33;
+    }
+    .lv-50{
+        background-color: #FF9400;
+    }
+    .lv-60{
+        background-color: #FF66CC;
+    }
+    .lv-70{
+        background-color: #CC3399;
+    }
+    .lv-80{
+        background-color: #FF3333;
+    }
+    .lv-90{
+        background-color: #CC0000;
+    }
+    .lv-100{
+        background-color: #660000;
+    }
+    /deep/ pre {
+        background: #fee9cc;
+        border: 1px dashed #ccc;
+        line-height: 22px;
+    }
+    /deep/ code {
+        padding: 0;
+        border: none;
+    }
+    /deep/ p code {
+        background: none;
+        color: hsl(0, 0%, 50%);
+        margin: 0 1px;
+        padding: 1px 4px;
+        border-radius: 1px;
+    }
+    /deep/ div pre.prettyprint {
+        font-size: 14px;
+        border-radius: 0px;
+        padding: 0 15px;
+        border: none;
+        margin: 20px -10px;
+        border-width: 1px 0px;
+        background: #f7f7f7;
+    }
+    /deep/ form {
+        margin-bottom: 0;
+    }
+    /deep/ textarea {
+        margin-bottom: 0;
+    }
+    /deep/ input, textarea {
+        background: hsla(0, 0%, 0%, 0);
     }
 </style>
