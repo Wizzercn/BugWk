@@ -2,6 +2,7 @@ import User from '@/components/User'
 import Lol from '@/components/Lol'
 import Add from '@/components/Add'
 import Bug from '@/components/Bug'
+import Search from '@/components/Search'
 
 export default [
     {
@@ -17,6 +18,11 @@ export default [
         path: "/lol",
         name: 'lol',
         component: Lol
+    },
+    {
+        path: "/lol/search/:keyword",
+        name: 'search',
+        component: Search
     },
     {
         path: "/lol/add",

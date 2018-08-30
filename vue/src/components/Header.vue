@@ -228,7 +228,8 @@
                 });
             },
             doSearch() {
-                console.log(1)
+                if (this.keyword)
+                    window.location.href="/lol/search/" + this.keyword
             }
         },
         created() {
@@ -239,7 +240,7 @@
 </script>
 
 <style scoped>
-    .search{
+    .search {
         float: right;
         margin-top: -50px;
     }

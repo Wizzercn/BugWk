@@ -40,7 +40,7 @@
 
 <script>
     export default {
-        name: "Lol",
+        name: "Search",
         data() {
             return {
                 isAdmin: false,
@@ -48,7 +48,8 @@
                 pagesize: 10,
                 currentPage: 1,
                 start: 1,
-                totalCount: 0
+                totalCount: 0,
+                keyword: ""
             }
         },
         methods: {
@@ -62,12 +63,14 @@
             pageData(page, size) {
                 this.$http.post(platform_base + '/platform/bug/data', {
                     "page": page,
-                    "size": size
+                    "size": size,
+                    "keyword":this.keyword
                 }, {
                     withCredentials: true
                 }).then((resp) => {
                     return resp.data
                 }).then((d) => {
+                    this.keyword=""
                     if (d.code == 0) {
                         this.tableData = d.data.list;
                         this.totalCount = d.data.pager.recordCount;
@@ -84,6 +87,7 @@
             if ("ADMIN" == this.$cookie.get("role")) {
                 this.isAdmin = true
             }
+            this.keyword = this.$route.params.keyword || ""
             this.pageData(this.currentPage, this.pagesize);
         }
     }

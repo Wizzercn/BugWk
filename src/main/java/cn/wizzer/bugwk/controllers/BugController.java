@@ -4,6 +4,7 @@ import cn.wizzer.bugwk.commons.base.Result;
 import cn.wizzer.bugwk.commons.filter.MyCrossOriginFilter;
 import cn.wizzer.bugwk.commons.filter.MyUserRoleFilter;
 import cn.wizzer.bugwk.commons.service.BugService;
+import cn.wizzer.bugwk.commons.service.LuceneSearchResult;
 import cn.wizzer.bugwk.commons.service.SearchService;
 import cn.wizzer.bugwk.commons.utils.Markdowns;
 import cn.wizzer.bugwk.commons.utils.Toolkit;
@@ -31,6 +32,7 @@ import org.nutz.mvc.adaptor.JsonAdaptor;
 import org.nutz.mvc.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -166,17 +168,32 @@ public class BugController {
     @Ok("json:{locked:'loginpass|salt',ignoreNull:false}")
     @AdaptBy(type = JsonAdaptor.class)
     @Filters({@By(type = MyCrossOriginFilter.class)})
-    public Object data(@Param(value = "size", df = "10") int size, @Param(value = "page", df = "1") int page) {
+    public Object data(@Param(value = "size", df = "10") int size, @Param(value = "page", df = "1") int page, @Param("keyword") String keyword) {
         try {
-            Cnd cnd = Cnd.NEW();
-            cnd.and("disabled", "=", false);
-            cnd.desc("updateAt");
-            Pager pager = new Pager();
-            pager.setPageNumber(page);
-            pager.setPageSize(size);
-            pager.setRecordCount(dao.count(Bug.class, cnd));
-            List<Bug> list = dao.query(Bug.class, cnd, pager);
-            return Result.success(new QueryResult(list, pager));
+            if (Strings.isNotBlank(keyword)) {
+                List<LuceneSearchResult> results = searchService.search(keyword, size);
+                List<Bug> list = new ArrayList<Bug>();
+                for (LuceneSearchResult result : results) {
+                    Bug bug = dao.fetch(Bug.class, result.getId());
+                    if (bug == null || bug.isDisabled())
+                        continue;
+                    bug.setTitle(result.getTitle());
+                    list.add(bug);
+                }
+                Pager pager = dao.createPager(page, size);
+                pager.setRecordCount(list.size());
+                return Result.success(new QueryResult(list, pager));
+            } else {
+                Cnd cnd = Cnd.NEW();
+                cnd.and("disabled", "=", false);
+                cnd.desc("updateAt");
+                Pager pager = new Pager();
+                pager.setPageNumber(page);
+                pager.setPageSize(size);
+                pager.setRecordCount(dao.count(Bug.class, cnd));
+                List<Bug> list = dao.query(Bug.class, cnd, pager);
+                return Result.success(new QueryResult(list, pager));
+            }
         } catch (Exception e) {
             return Result.error();
         }
