@@ -51,12 +51,12 @@ public class FirewallProcessor extends AbstractProcessor {
         doNext(ac);
     }
 
-    public boolean isAjax(ServletRequest req) {
+    private boolean isAjax(ServletRequest req) {
         String value = ((HttpServletRequest) req).getHeader("X-Requested-With");
         return value != null && "XMLHttpRequest".equalsIgnoreCase(value.trim());
     }
 
-    public boolean isQpsUri(ServletRequest req) {
+    private boolean isQpsUri(ServletRequest req) {
         return qpsUri.equals(((HttpServletRequest) req).getRequestURI());
     }
 }

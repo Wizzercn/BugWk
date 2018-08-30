@@ -5,8 +5,8 @@ var chain={
 			  "org.nutz.mvc.impl.processor.UpdateRequestAttributesProcessor",
 		      "org.nutz.mvc.impl.processor.EncodingProcessor",
 		      "org.nutz.mvc.impl.processor.ModuleProcessor",
-              "cn.wizzer.bugwk.commons.processor.FirewallProcessor",
-		      "org.nutz.mvc.impl.processor.ActionFiltersProcessor",
+			  "cn.wizzer.bugwk.commons.processor.FirewallProcessor",
+			  "org.nutz.mvc.impl.processor.ActionFiltersProcessor",
 		      "org.nutz.mvc.impl.processor.AdaptorProcessor",
 		      "org.nutz.mvc.impl.processor.MethodInvokeProcessor",
 			  "org.nutz.mvc.impl.processor.ViewProcessor"
