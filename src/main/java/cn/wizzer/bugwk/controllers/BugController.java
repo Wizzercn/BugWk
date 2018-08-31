@@ -200,14 +200,24 @@ public class BugController {
     }
 
     @At("/s")
-    @Ok("json")
+    @Ok("json:{locked:'loginpass|salt',ignoreNull:false}")
     @AdaptBy(type = JsonAdaptor.class)
     @Filters({@By(type = MyCrossOriginFilter.class)})
-    public Object s(@Param("id") String id) {
+    public Object s(@Param("id") String id, HttpSession session) {
         try {
+            String role = Strings.sNull(session.getAttribute("role"));
             Bug bug = dao.fetch(Bug.class, id);
             bug.setNote(Markdowns.toHtml(bug.getNote(), ""));
-            return Result.success(dao.fetchLinks(bug, null));
+            dao.fetchLinks(bug, null);
+            if (bug.getUser() != null) {
+                bug.getUser().setLoginname("");
+                bug.getUser().setLoginpass("");
+                bug.getUser().setSalt("");
+            }
+            if (Strings.isBlank(role) && bug.getUser() != null) {
+                bug.getUser().setRealname("");
+            }
+            return Result.success(bug);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.error();
