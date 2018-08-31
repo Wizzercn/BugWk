@@ -83,7 +83,7 @@ public class UserController {
         try {
             String salt = R.UU32();
             dao.update(User.class, Chain.make("nickname", user.getNickname()).add("realname", user.getRealname())
-                            .add("salt", salt).add("loginpass", Lang.md5(user.getLoginname() + salt))
+                            .add("salt", salt).add("loginpass", Lang.md5(user.getLoginname() + user.getLoginpass() + salt))
                     , Cnd.where("loginname", "=", user.getLoginname()));
             return Result.success(user);
         } catch (Exception e) {
