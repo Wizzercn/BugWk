@@ -240,6 +240,7 @@ public class BugController {
             reply.setCreateBy(loginname);
             reply.setNickname(nickname);
             dao.insert(reply);
+            pubSubService.fire("ps:topic:reply", bugId);
             return Result.success();
         } catch (Exception e) {
             e.printStackTrace();

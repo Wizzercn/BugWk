@@ -55,7 +55,7 @@ public class SearchService {
         Document document = new Document();
         Field field;
         FieldType fieldType;
-        dao.fetchLinks(bug, "replies");
+        dao.fetchLinks(bug, null);
         // 先加入id
         fieldType = new FieldType();
         fieldType.setIndexOptions(IndexOptions.DOCS);// 索引

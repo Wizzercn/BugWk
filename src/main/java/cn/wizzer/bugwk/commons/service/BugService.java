@@ -13,7 +13,7 @@ import org.nutz.log.Logs;
  * Created by wizzer on 2018.08
  */
 @IocBean(create = "init")
-public class BugService  implements PubSub {
+public class BugService implements PubSub {
     private static final Log log = Logs.get();
     @Inject
     private SearchService searchService;
@@ -22,15 +22,19 @@ public class BugService  implements PubSub {
     @Inject
     private PubSubService pubSubService;
 
-    public void init(){
+    public void init() {
         pubSubService.reg("ps:topic:*", this);
     }
+
     @Override
     public void onMessage(String channel, String message) {
         log.debugf("onMessage channel=%s, msg=%s", channel, message);
         switch (channel) {
             case "ps:topic:add":
                 searchService.addIndex(dao.fetch(Bug.class, message), true);
+                break;
+            case "ps:topic:reply":
+                searchService.addIndex(dao.fetch(Bug.class, message), false);
                 break;
             default:
                 break;
