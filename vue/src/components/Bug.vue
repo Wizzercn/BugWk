@@ -164,6 +164,9 @@
             }).then((d) => {
                 if (d.code == 0) {
                     this.bug = d.data;
+                    if(this.bug.user&&this.bug.user.realname==""){
+                        this.addFormVisible=false
+                    }
                 } else {
                     this.$message({
                         message: d.msg,

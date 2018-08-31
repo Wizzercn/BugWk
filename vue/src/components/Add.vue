@@ -184,15 +184,6 @@
         mounted: function () {
             if ("ADMIN" == this.$cookie.get("role")) {
                 this.isAdmin = true
-                this.$http.post(platform_base + '/platform/bug/tag', {name: ""}).then((resp) => {
-                    return resp.data
-                }).then((d) => {
-                    if (d.code == 0) {
-                        this.tags = d.data.map(item => {
-                            return {value: item.name, label: item.name};
-                        });
-                    }
-                });
                 this.$http.post(platform_base + '/platform/bug/user', {name: ""}).then((resp) => {
                     return resp.data
                 }).then((d) => {
@@ -203,6 +194,15 @@
                     }
                 });
             }
+            this.$http.post(platform_base + '/platform/bug/tag', {name: ""}).then((resp) => {
+                return resp.data
+            }).then((d) => {
+                if (d.code == 0) {
+                    this.tags = d.data.map(item => {
+                        return {value: item.name, label: item.name};
+                    });
+                }
+            });
         }
     }
 </script>
