@@ -44,7 +44,7 @@ public class UserController {
             }
             String salt = R.UU32();
             user.setSalt(salt);
-            user.setLoginpass(Lang.md5(user.getLoginname() + salt));
+            user.setLoginpass(Lang.md5(user.getLoginname() + user.getLoginpass() + salt));
             user.setCreateAt(Times.getTS());
             dao.insert(user);
             return Result.success();
@@ -81,7 +81,10 @@ public class UserController {
     @AdaptBy(type = JsonAdaptor.class)
     public Object update(@Param("::") User user) {
         try {
-            dao.update(User.class, Chain.make("nickname", user.getNickname()).add("realname", user.getRealname()), Cnd.where("loginname", "=", user.getLoginname()));
+            String salt = R.UU32();
+            dao.update(User.class, Chain.make("nickname", user.getNickname()).add("realname", user.getRealname())
+                            .add("salt", salt).add("loginpass", Lang.md5(user.getLoginname() + salt))
+                    , Cnd.where("loginname", "=", user.getLoginname()));
             return Result.success(user);
         } catch (Exception e) {
             return Result.error();

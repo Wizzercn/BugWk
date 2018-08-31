@@ -40,7 +40,7 @@ public class LoginController {
             if (user.isDisabled()) {
                 return Result.error("用户已被禁用");
             }
-            if (!user.getLoginpass().equals(Lang.md5(loginname + user.getSalt()))) {
+            if (!user.getLoginpass().equals(Lang.md5(loginname + loginpass + user.getSalt()))) {
                 return Result.error("用户密码不正确");
             }
             log.debug("login session id::" + session.getId());

@@ -219,6 +219,16 @@
         methods: {
             openAdd() {
                 this.dialogFormVisible = true
+                this.form = {
+                    id: '',
+                    loginname: '',
+                    loginpass: '',
+                    checkpass: '',
+                    nickname: '',
+                    realname: '',
+                    disabled: true,
+                    role: ''
+                }
             },
             save() {
                 this.$refs["form"].validate((valid) => {

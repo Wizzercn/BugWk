@@ -60,6 +60,16 @@
                         <el-input v-model="infoForm.realname" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
+                <el-form-item label="新密码" prop="loginpass" :label-width="formLabelWidth">
+                    <el-col :span="20">
+                        <el-input type="password" v-model="infoForm.loginpass" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="checkpass" :label-width="formLabelWidth">
+                    <el-col :span="20">
+                        <el-input type="password" v-model="infoForm.checkpass" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="resetInfoForm()">取 消</el-button>
@@ -73,6 +83,13 @@
     export default {
         name: "Header",
         data() {
+            var validatePass = (rule, value, callback) => {
+                if (value !== this.infoForm.loginpass) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 adminVisible: false,
                 userVisible: false,
@@ -102,7 +119,15 @@
                     ],
                     realname: [
                         {required: true, message: '请输入姓名', trigger: 'blur'}
-                    ]
+                    ],
+                    loginpass: [
+                        {required: true, message: '请输入密码', trigger: 'blur'},
+                        {min: 3, max: 8, message: '密码长度必须是3-8位', trigger: 'change'}
+                    ],
+                    checkpass: [
+                        {required: true, message: '请再次输入密码', trigger: 'blur'},
+                        {validator: validatePass, trigger: 'change'}
+                    ],
                 },
                 formLabelWidth: '120px',
             };

@@ -57,7 +57,7 @@ public class MainLauncher {
                 user.setRealname("超级管理员");
                 String salt = R.UU32();
                 user.setSalt(salt);
-                user.setLoginpass(Lang.md5(user.getLoginname() + salt));
+                user.setLoginpass(Lang.md5(user.getLoginname() + user.getLoginpass() + salt));
                 user.setCreateAt(Times.getTS());
                 user.setRole(Role.ADMIN);
                 user.setDisabled(false);
