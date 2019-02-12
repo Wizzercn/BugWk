@@ -6,9 +6,9 @@
     <packaging>jar</packaging>
     <groupId>cn.wizzer</groupId>
     <artifactId>bugwk</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <properties>
-        <nutzboot.version>2.3-SNAPSHOT</nutzboot.version>
+        <nutzboot.version>2.2.9</nutzboot.version>
         <pinyin4j.veision>2.5.1</pinyin4j.veision>
         <druid.version>1.1.10</druid.version>
         <jjwt.version>0.9.0</jjwt.version>

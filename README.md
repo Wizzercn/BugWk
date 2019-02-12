@@ -8,6 +8,12 @@
 #### 技术体系
 * 前端：Vue + Element
 * 后端：NutzBoot + Lucene + Redis + MySQL
+#### 使用说明
+* vue启动命令 `npx vue-cli-service serve` 打包命令 `npx vue-cli-service build`
+* vue编译完成后，index.html 中 platform_base 改为空字符串，然后拷贝到 `java/resources/static` 目录下覆盖
+* java maven 打包命令 `mvn package nutzboot:shade` 然后通过jar包启动 `java -jar bugwk-1.0.jar `
+* 启动时自动建表，登陆帐号 superadmin  密码 1 
+
 #### 开发计划
 ##### 一期
 * Bug及解决方法的录入功能（参考答案及外部链接，是否重复发生）
