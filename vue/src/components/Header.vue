@@ -1,35 +1,25 @@
 <template>
     <div>
+        <div style="float:right;position:relative;top: 10px;z-index:1000;">
+            <div style="float:right;">
+                <el-button v-show="adminVisible"  @click="resetIndex" size="small">重置索引</el-button>
+                <el-button v-show="userVisible" @click="editUser" size="small">修改资料</el-button>
+                <el-button v-show="userVisible" @click="logout" size="small">退出登录</el-button>
+                <el-button v-show="!userVisible" @click="openLogin" size="small">登录</el-button>
+            </div>
+            <div style="float:right;width: 220px;padding-right: 20px;">
+                <el-input size="small" placeholder="请输入内容" v-model="keyword" @keyup.enter.native="doSearch"
+                          class="input-with-select">
+                    <el-button slot="append" icon="el-icon-search" @click="doSearch"></el-button>
+                </el-input>
+            </div>
+        </div>
         <el-menu ref="menu" :default-active="$route.name" :router="true" class="el-menu-demo" mode="horizontal"
                  @select="handleSelect">
             <el-menu-item index="lol" :route="{name:'lol'}">问题中心</el-menu-item>
-            <el-submenu index="2" v-show="adminVisible">
-                <template slot="title">系统管理</template>
-                <el-menu-item index="user" :route="{name:'user'}">
-                    用户管理
-                </el-menu-item>
-                <el-menu-item index="tag">标签管理</el-menu-item>
-                <el-menu-item index="#" @click="resetIndex">重置索引</el-menu-item>
-            </el-submenu>
-            <el-submenu index="3" v-show="userVisible">
-                <template slot="title">用户中心</template>
-                <el-menu-item index="#" @click="editUser">
-                    修改资料
-                </el-menu-item>
-                <el-menu-item index="#" @click="logout">
-                    退出登录
-                </el-menu-item>
-            </el-submenu>
-            <el-menu-item index="#" v-show="!userVisible">
-                <el-button @click="openLogin">登录</el-button>
-            </el-menu-item>
+            <el-menu-item index="user" v-show="adminVisible" :route="{name:'user'}">用户管理</el-menu-item>
         </el-menu>
         <div class="line"></div>
-        <div class="search">
-            <el-input placeholder="请输入内容" v-model="keyword" @keyup.enter.native="doSearch" class="input-with-select">
-                <el-button slot="append" icon="el-icon-search" @click="doSearch"></el-button>
-            </el-input>
-        </div>
         <el-dialog title="用户登录" :visible.sync="dialogFormVisible" @close="resetForm('loginForm')">
             <el-form :model="loginForm" :rules="rules" ref="loginForm">
                 <el-form-item label="用户名" prop="loginname" :label-width="formLabelWidth">
@@ -72,8 +62,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="resetInfoForm()">取 消</el-button>
-                <el-button type="primary" @click="save">确 定</el-button>
+                <el-button @click="resetInfoForm()" size="small">取 消</el-button>
+                <el-button type="primary" @click="save" size="small">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -151,21 +141,20 @@
                 this.infoForm.realname = this.$cookie.get("realname")
             },
             logout() {
-                this.$cookie.delete("role");
-                this.loadRole("NONE");
-                //this.$router.push("/lol")
+                this.$cookie.delete("role")
+                this.loadRole("NONE")
                 window.location.reload()
             },
             openLogin() {
                 this.dialogFormVisible = true
             },
             resetForm(formName) {
-                this.dialogFormVisible = false;
-                this.$refs[formName].resetFields();
+                this.dialogFormVisible = false
+                this.$refs[formName].resetFields()
             },
             resetInfoForm() {
-                this.dialogInfoFormVisible = false;
-                this.$refs["infoForm"].resetFields();
+                this.dialogInfoFormVisible = false
+                this.$refs["infoForm"].resetFields()
             },
             save() {
                 this.$refs["infoForm"].validate((valid) => {
@@ -254,7 +243,7 @@
             },
             doSearch() {
                 if (this.keyword)
-                    window.location.href="/lol/search/" + this.keyword
+                    window.location.href = "/lol/search/" + this.keyword
             }
         },
         created() {
@@ -265,8 +254,20 @@
 </script>
 
 <style scoped>
+    .top {
+        width: 100%;
+    }
+
     .search {
         float: right;
+        position: absolute;
+        margin-top: -50px;
+        margin-right: 100px;
+    }
+
+    .buttons {
+        float: right;
+        position: absolute;
         margin-top: -50px;
     }
 </style>

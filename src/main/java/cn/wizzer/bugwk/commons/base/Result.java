@@ -53,6 +53,21 @@ public class Result implements Serializable {
         return new Result(0, "操作成功", null);
     }
 
+    public Result addCode(int code) {
+        this.code = code;
+        return this;
+    }
+
+    public Result addMsg(String msg) {
+        this.msg = Strings.sNull(msg);
+        return this;
+    }
+
+    public Result addData(Object data) {
+        this.data = data;
+        return this;
+    }
+
     public static Result error() {
         return new Result(1, "操作失败", null);
     }

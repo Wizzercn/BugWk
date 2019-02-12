@@ -1,11 +1,11 @@
 <template>
     <div>
         <el-row v-show="isAdmin">
-            <el-button type="primary" @click="addBug">添加新Bug</el-button>
+            <el-button type="primary" @click="addBug" size="small">添加新Bug</el-button>
         </el-row>
         <el-table
                 :data="tableData"
-                style="width: 100%">
+                style="width: 100%" size="small">
             <el-table-column
                     prop="nickname"
                     label="Buger"
@@ -17,7 +17,7 @@
                 <template scope="scope">
                     <span :class="'level lv-'+scope.row.level">&nbsp;</span> <a class="bug_title"
                                                                                 :href="'/lol/bug/'+scope.row.id"
-                                                                                target="_blank">{{scope.row.title}}</a>
+                                                                                >{{scope.row.title}}</a>
                 </template>
             </el-table-column>
             <el-table-column

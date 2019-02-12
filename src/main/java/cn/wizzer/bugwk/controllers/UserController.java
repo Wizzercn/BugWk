@@ -104,6 +104,36 @@ public class UserController {
         }
     }
 
+    @At("/pass")
+    @Ok("json")
+    @AdaptBy(type = JsonAdaptor.class)
+    @Filters({@By(type = MyCrossOriginFilter.class), @By(type = MyAdminRoleFilter.class)})
+    public Object pass(@Param("loginname") String loginname) {
+        try {
+            String salt = R.UU32();
+            String loginpass = R.captchaNumber(6);
+            dao.update(User.class, Chain.make("salt", salt).add("loginpass", Lang.md5(loginname + loginpass + salt))
+                    , Cnd.where("loginname", "=", loginname));
+            return Result.success().addData(loginpass);
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    @At("/status")
+    @Ok("json")
+    @AdaptBy(type = JsonAdaptor.class)
+    @Filters({@By(type = MyCrossOriginFilter.class), @By(type = MyAdminRoleFilter.class)})
+    public Object status(@Param("loginname") String loginname, @Param("status") boolean status) {
+        try {
+            dao.update(User.class, Chain.make("disabled", status)
+                    , Cnd.where("loginname", "=", loginname));
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
     @At("/data")
     @Ok("json:{locked:'loginpass|salt',ignoreNull:false}")
     @AdaptBy(type = JsonAdaptor.class)

@@ -1,11 +1,11 @@
 <template>
     <div>
         <el-row>
-            <el-button type="primary" @click="openAdd">新建用户</el-button>
+            <el-button type="primary" @click="openAdd" size="small">新建用户</el-button>
         </el-row>
         <el-table
                 :data="tableData"
-                style="width: 100%">
+                style="width: 100%" size="small">
             <el-table-column
                     prop="loginname"
                     label="用户名"
@@ -27,7 +27,10 @@
                     <el-switch
                             v-model="scope.row.disabled"
                             active-color="#ff4949"
-                            inactive-color="#13ce66">
+                            inactive-color="#13ce66"
+                            :active-value="true"
+                            :inactive-value="false"
+                    @change="changeStatus(scope.row)">
                     </el-switch>
                 </template>
             </el-table-column>
@@ -35,17 +38,22 @@
                     prop="role"
                     label="角色">
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column width="300" label="操作">
                 <template scope="scope">
                     <el-button
                             size="small"
                             type="primary"
-                            @click="handleEdit(scope.$index, scope.row)">编辑
+                            @click="handleEdit(scope.$index, scope.row)">编辑用户
                     </el-button>
                     <el-button
                             size="small"
                             type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除
+                            @click="handleDelete(scope.$index, scope.row)">删除用户
+                    </el-button>
+                    <el-button
+                            size="small"
+                            type="primary"
+                            @click="handlePass(scope.$index, scope.row)">重置密码
                     </el-button>
                 </template>
             </el-table-column>
@@ -340,6 +348,43 @@
                 }).catch(() => {
                 })
             },
+            handlePass: function (index, row) {
+                this.$confirm('重置用户 '+row.loginname+' 的密码, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$http.post(platform_base + '/platform/user/pass', {
+                        "loginname": row.loginname
+                    }, {
+                        withCredentials: true
+                    }).then((resp) => {
+                        return resp.data
+                    }).then((d) => {
+                        if (d.code == 0) {
+                            this.$alert('新密码为 '+d.data, '请记住新密码', {
+                                confirmButtonText: '确定'
+                            });
+                        } else {
+                            this.$message({
+                                message: d.msg,
+                                type: 'error'
+                            });
+                        }
+                    });
+                }).catch(() => {
+                })
+            },
+            changeStatus:function(row){
+                this.$http.post(platform_base + '/platform/user/status', {
+                    "loginname": row.loginname,"status":row.disabled
+                }, {
+                    withCredentials: true
+                }).then((resp) => {
+                    return resp.data
+                }).then((d) => {
+                });
+            },
             handleCurrentChange: function (val) {
                 this.currentPage = val;
                 this.pageData(this.currentPage, this.pagesize);
@@ -366,11 +411,11 @@
             }
         },
         mounted: function () {
-            this.pageData(this.currentPage, this.pagesize);
+            if ("ADMIN" == this.$cookie.get("role")) {
+                this.pageData(this.currentPage, this.pagesize)
+            }else {
+                this.$router.push({ path:'/lol'})
+            }
         }
     }
 </script>
-
-<style scoped>
-
-</style>

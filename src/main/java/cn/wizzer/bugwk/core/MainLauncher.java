@@ -55,6 +55,7 @@ public class MainLauncher {
                 user.setLoginname("superadmin");
                 user.setNickname("大鲨鱼");
                 user.setRealname("超级管理员");
+                user.setLoginpass("1");
                 String salt = R.UU32();
                 user.setSalt(salt);
                 user.setLoginpass(Lang.md5(user.getLoginname() + user.getLoginpass() + salt));

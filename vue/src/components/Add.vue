@@ -3,13 +3,14 @@
         <el-row>
             <div class="block">
                 <span class="demonstration">标题</span>
-                <el-input type="text" v-model="bugForm.title" auto-complete="off"></el-input>
+                <el-input type="text" size="small" v-model="bugForm.title" auto-complete="off"></el-input>
             </div>
         </el-row>
         <el-row>
             <div class="block">
                 <span class="demonstration">标签</span>
                 <el-select
+                        size="small"
                         class="span_n"
                         v-model="bugForm.tag"
                         multiple
@@ -34,6 +35,7 @@
             <div class="block">
                 <span class="demonstration">作者</span>
                 <el-select
+                        size="small"
                         class="span_n"
                         v-model="bugForm.userId"
                         filterable
@@ -63,8 +65,8 @@
                       placeholder='使用Markdown语法,下方有粘贴代码和日志的按钮,会有代码高亮'></textarea>
         </el-row>
         <el-row>
-            <el-button type="primary" @click="topicSubmit">{{topicButtonTip}}</el-button>
-            <el-button type="info" @click="topicAddCode">插入代码或日志片段</el-button>
+            <el-button type="primary" @click="topicSubmit" size="small">{{topicButtonTip}}</el-button>
+            <el-button type="info" @click="topicAddCode" size="small">插入代码或日志片段</el-button>
         </el-row>
         <el-dialog title="贴代码或日志" :visible.sync="addFormVisible" @close="resetForm">
             <el-form :model="bugForm" ref="bugForm">
@@ -73,8 +75,8 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="resetForm">取 消</el-button>
-                <el-button type="primary" @click="addIt">确 定</el-button>
+                <el-button @click="resetForm" size="small">取 消</el-button>
+                <el-button type="primary" @click="addIt" size="small">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -210,6 +212,7 @@
 <style scoped>
     .demonstration {
         margin-top: 5px;
+        line-height:30px;
     }
     .span_n{
         width: 100% !important;

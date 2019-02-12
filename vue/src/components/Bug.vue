@@ -20,7 +20,7 @@
         </el-row>
         <el-row class="before_d">
             <div class="changes">
-                严重度: {{bug.level}}
+                严重度: {{bug.level}}%
             </div>
         </el-row>
         <el-row>
@@ -64,8 +64,8 @@
                                  placeholder='使用Markdown语法,下方有粘贴代码和日志的按钮,会有代码高亮'></textarea>
                     </form>
 
-                    <el-button type="primary" @click="topicSubmit">回复</el-button>
-                    <el-button type="info" @click="topicAddCode">插入代码或日志片段</el-button>
+                    <el-button type="primary" @click="topicSubmit" size="small">回复</el-button>
+                    <el-button type="info" @click="topicAddCode" size="small">插入代码或日志片段</el-button>
                 </div>
             </div>
             <el-dialog title="贴代码或日志" :visible.sync="addFormVisible" @close="resetForm">
@@ -75,8 +75,8 @@
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="resetForm">取 消</el-button>
-                    <el-button type="primary" @click="addIt">确 定</el-button>
+                    <el-button @click="resetForm" size="small">取 消</el-button>
+                    <el-button type="primary" @click="addIt" size="small">确 定</el-button>
                 </div>
             </el-dialog>
         </el-row>
