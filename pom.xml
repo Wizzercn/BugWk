@@ -18,7 +18,7 @@
         <lucene.version>7.4.0</lucene.version>
         <asm.version>5.0.3</asm.version>
         <jackson-databind.version>2.9.5</jackson-databind.version>
-        <mysql-connector-java.version>5.1.46</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.16</mysql-connector-java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencyManagement>
